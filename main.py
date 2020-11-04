@@ -1,11 +1,7 @@
 import bs4
 import csv
 import requests
-
-pages = [
-    "https://chooseparisregion.org/news/paris-regions-promise-for-sustainable-mobility",
-    "https://chooseparisregion.org/news/let-migo-help-you-find-your-way-around-paris-region"
-]
+import pages
 
 
 def init_csv():
@@ -47,7 +43,7 @@ def scrap(response):
 def main():
     init_csv()
 
-    for page in pages:
+    for page in pages.pages:
         scrap(requests.get(page))
     return
 
