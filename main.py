@@ -6,17 +6,17 @@ import pages
 
 def init_csv():
     with open('./articles.csv', 'w') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter='$',
+        spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(["title", "body", "tags"])
+        spamwriter.writerow(["title", "body", "tags", "date", "image url"])
     return
 
 
-def create_csv(title, content, tags):
+def create_csv(title, content, tags, date, image_url):
     with open('./articles.csv', 'a') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter='$',
+        spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([title, content, tags])
+        spamwriter.writerow([title, content, tags, date, image_url])
     return
 
 
@@ -26,6 +26,9 @@ def scrap(response):
     article_title = soup.find("h1", attrs={"class": "h2"})
     article_header = soup.find("p", attrs={"class": "p--excerpt"})
     article_content = soup.find("main", {"class": "container"})
+    article_date = soup.find("span", {"class": "single__date"})
+    # should only capture first image found
+    article_image_url = soup.find("img")
     div_tags = soup.find("ul", {"class": "single__tags"})
 
     tags = []
@@ -35,8 +38,10 @@ def scrap(response):
     tags = '|'.join(tags)
     title = article_title.string
     content = str(article_header) + str(article_content)
+    date = article_date.string
+    image_url = article_image_url["srcset"]
 
-    create_csv(title, content, tags)
+    create_csv(title, content, tags, date, image_url)
     return
 
 
