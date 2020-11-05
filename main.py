@@ -39,12 +39,12 @@ def scrap(response, url_tag):
     title = article_title.string
     capitalized_tag = title.title()
     content = str(article_header) + str(article_content)
-    # re.sub('class="h3"*', '', content)
+    content_clean = content.replace('class="h3"', "")
     date = article_date.string
     image_url = article_image_url["srcset"]
     image_alt = article_image_url["alt"]
 
-    create_csv(title, content, tags, date, image_url, image_alt, url_tag, capitalized_tag)
+    create_csv(title, content_clean, tags, date, image_url, image_alt, url_tag, capitalized_tag)
     return
 
 
