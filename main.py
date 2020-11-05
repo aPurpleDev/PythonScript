@@ -22,13 +22,18 @@ def create_csv(title, content, tags, date, image, url_tag):
 
 
 def scrap(response, url_tag):
+    if response.status_code != 200:
+        print("Invalid URL : " + url_tag)
+        create_csv("No data", "No data", "No data", "No data", "No data", "No data")
+        return
+
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
 
     article_title = soup.find("h1", attrs={"class": "h2"})
     article_header = soup.find("p", attrs={"class": "p--excerpt"})
     article_content = soup.find("main", {"class": "container"})
     article_date = soup.find("span", {"class": "single__date"})
-    # should only capture first image found
+    # only capture first image found
     article_image = soup.find("img")
     div_tags = soup.find("ul", {"class": "single__tags"})
 
@@ -56,6 +61,13 @@ def main():
     init_csv()
 
     for url in pages.urls:
+
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except:
+            return print("Invalid URL error : " + url)
+
         url_tag = url.replace("https://chooseparisregion.org", "")
         scrap(requests.get(url), url_tag)
     return
