@@ -8,19 +8,19 @@ def init_csv():
     with open('./articles.csv', 'w') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(["title", "body", "tags", "date", "image url", "image alt"])
+        spamwriter.writerow(["title", "body", "tags", "date", "image url", "image alt", "url_tag"])
     return
 
 
-def create_csv(title, content, tags, date, image_url, image_alt):
+def create_csv(title, content, tags, date, image_url, image_alt, url_tag):
     with open('./articles.csv', 'a') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([title, content, tags, date, image_url, image_alt])
+        spamwriter.writerow([title, content, tags, date, image_url, image_alt, url_tag])
     return
 
 
-def scrap(response):
+def scrap(response, url_tag):
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
 
     article_title = soup.find("h1", attrs={"class": "h2"})
@@ -43,7 +43,7 @@ def scrap(response):
     image_url = article_image_url["srcset"]
     image_alt = article_image_url["alt"]
 
-    create_csv(title, content, tags, date, image_url, image_alt)
+    create_csv(title, content, tags, date, image_url, image_alt, url_tag)
     return
 
 
@@ -51,7 +51,8 @@ def main():
     init_csv()
 
     for page in pages.pages:
-        scrap(requests.get(page))
+        url_tag = page.replace("https://chooseparisregion.org", "")
+        scrap(requests.get(page), url_tag)
     return
 
 
