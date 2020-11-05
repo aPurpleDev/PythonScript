@@ -8,15 +8,15 @@ def init_csv():
     with open('./articles.csv', 'w') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(["title", "body", "tags", "date", "image url", "image alt", "url_tag"])
+        spamwriter.writerow(["title", "body", "tags", "date", "image url", "image alt", "url_tag", "capitalized_tag"])
     return
 
 
-def create_csv(title, content, tags, date, image_url, image_alt, url_tag):
+def create_csv(title, content, tags, date, image_url, image_alt, url_tag, capitalized_tag):
     with open('./articles.csv', 'a') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([title, content, tags, date, image_url, image_alt, url_tag])
+        spamwriter.writerow([title, content, tags, date, image_url, image_alt, url_tag, capitalized_tag])
     return
 
 
@@ -37,13 +37,14 @@ def scrap(response, url_tag):
 
     tags = '|'.join(tags)
     title = article_title.string
+    capitalized_tag = title.title()
     content = str(article_header) + str(article_content)
     # re.sub('class="h3"*', '', content)
     date = article_date.string
     image_url = article_image_url["srcset"]
     image_alt = article_image_url["alt"]
 
-    create_csv(title, content, tags, date, image_url, image_alt, url_tag)
+    create_csv(title, content, tags, date, image_url, image_alt, url_tag, capitalized_tag)
     return
 
 
