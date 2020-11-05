@@ -43,6 +43,7 @@ def scrap(response, url_tag):
     content_clean = content.replace('class="h3"', "")
     date = article_date.string
     image_url = article_image["srcset"]
+    # alts are empty in current urls
     image_alt = article_image["alt"]
 
     create_csv(title, content_clean, tags, date, image_url, image_alt, url_tag, capitalized_tag)
