@@ -9,15 +9,15 @@ def init_csv():
         # original delimiter was $
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(["title", "body", "tags", "date", "image url", "image alt", "url_tag", "capitalized_tag"])
+        spamwriter.writerow(["title", "body", "tags", "date", "image", "url_tag"])
     return
 
 
-def create_csv(title, content, tags, date, image_url, image_alt, url_tag, capitalized_tag):
+def create_csv(title, content, tags, date, image, url_tag):
     with open('./articles.csv', 'a') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([title, content, tags, date, image_url, image_alt, url_tag, capitalized_tag])
+        spamwriter.writerow([title, content, tags, date, image, url_tag])
     return
 
 
@@ -36,17 +36,19 @@ def scrap(response, url_tag):
     for tag in div_tags.find_all("a", {"class": "btn btn--round"}):
         tags.append(tag.string)
 
-    tags = '|'.join(tags)
+    tags = '|'.join(tags).title()
     title = article_title.string
-    capitalized_tag = title.title()
     content = str(article_header) + str(article_content)
     content_clean = content.replace('class="h3"', "")
+    # formattage de la date pour pouvoir la manipuler comme tu veux
     date = article_date.string
-    image_url = article_image["srcset"]
     # alts are empty in current urls
-    image_alt = article_image["alt"]
+    if article_image["alt"] == "":
+        article_image["alt"] = title
+    if not article_image.has_attr("title") or article_image["title"] == "":
+        article_image["title"] = title
 
-    create_csv(title, content_clean, tags, date, image_url, image_alt, url_tag, capitalized_tag)
+    create_csv(title, content_clean, tags, date, article_image, url_tag)
     return
 
 
