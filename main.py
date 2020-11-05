@@ -1,8 +1,7 @@
 import bs4
 import csv
 import requests
-import pages
-import re
+from providers import pages
 
 
 def init_csv():
