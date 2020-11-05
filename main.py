@@ -6,6 +6,7 @@ from providers import pages
 
 def init_csv():
     with open('./articles.csv', 'w') as csvfile:
+        # original delimiter was $
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow(["title", "body", "tags", "date", "image url", "image alt", "url_tag", "capitalized_tag"])
@@ -28,7 +29,7 @@ def scrap(response, url_tag):
     article_content = soup.find("main", {"class": "container"})
     article_date = soup.find("span", {"class": "single__date"})
     # should only capture first image found
-    article_image_url = soup.find("img")
+    article_image = soup.find("img")
     div_tags = soup.find("ul", {"class": "single__tags"})
 
     tags = []
@@ -41,8 +42,8 @@ def scrap(response, url_tag):
     content = str(article_header) + str(article_content)
     content_clean = content.replace('class="h3"', "")
     date = article_date.string
-    image_url = article_image_url["srcset"]
-    image_alt = article_image_url["alt"]
+    image_url = article_image["srcset"]
+    image_alt = article_image["alt"]
 
     create_csv(title, content_clean, tags, date, image_url, image_alt, url_tag, capitalized_tag)
     return
@@ -51,10 +52,13 @@ def scrap(response, url_tag):
 def main():
     init_csv()
 
-    for page in pages.pages:
-        url_tag = page.replace("https://chooseparisregion.org", "")
-        scrap(requests.get(page), url_tag)
+    for url in pages.urls:
+        url_tag = url.replace("https://chooseparisregion.org", "")
+        scrap(requests.get(url), url_tag)
     return
 
 
+# PyCharm IDE bugs this out
+# if name == "main":
+#    main()
 main()
