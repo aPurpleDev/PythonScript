@@ -65,7 +65,7 @@ def main():
         try:
             response = requests.get(url)
             response.raise_for_status()
-        except:
+        except (ValueError, Exception):
             return print("Invalid URL error : " + url)
 
         url_tag = url.replace("https://chooseparisregion.org", "")
