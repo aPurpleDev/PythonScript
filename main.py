@@ -2,21 +2,22 @@ import bs4
 import csv
 import requests
 import pages
+import re
 
 
 def init_csv():
     with open('./articles.csv', 'w') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(["title", "body", "tags", "date", "image url"])
+        spamwriter.writerow(["title", "body", "tags", "date", "image url", "image alt"])
     return
 
 
-def create_csv(title, content, tags, date, image_url):
+def create_csv(title, content, tags, date, image_url, image_alt):
     with open('./articles.csv', 'a') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([title, content, tags, date, image_url])
+        spamwriter.writerow([title, content, tags, date, image_url, image_alt])
     return
 
 
@@ -38,10 +39,12 @@ def scrap(response):
     tags = '|'.join(tags)
     title = article_title.string
     content = str(article_header) + str(article_content)
+    # re.sub('class="h3"*', '', content)
     date = article_date.string
     image_url = article_image_url["srcset"]
+    image_alt = article_image_url["alt"]
 
-    create_csv(title, content, tags, date, image_url)
+    create_csv(title, content, tags, date, image_url, image_alt)
     return
 
 
