@@ -25,7 +25,8 @@ def scrap(response, url_tag):
     title = article_title.string
     content = str(article_header) + str(article_content)
     content_clean = content.replace('class="h3"', "")
-    date = article_date.string
+    date = datetime.strptime(article_date.string, "%B %d, %Y")
+    formatted_date = date.strftime("%d %B, %Y")
 
     if article_image["alt"] == "":
         article_image["alt"] = title
@@ -33,5 +34,5 @@ def scrap(response, url_tag):
     if not article_image.has_attr("title") or article_image["title"] == "":
         article_image["title"] = title
 
-    csv_manager.create_csv(title, content_clean, tags, date, article_image, url_tag)
+    csv_manager.create_csv(title, content_clean, tags, formatted_date, article_image, url_tag)
     return
