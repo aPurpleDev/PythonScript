@@ -20,9 +20,11 @@ def find_handler(soup, name, attrs = None):
 
 def scrap(response, url_tag):
     if response.status_code != 200:
-        csv_manager.create_csv("Status code NOK url" + url_tag, "No data", "No data", "No data", "No data", "No data")
+        csv_manager.create_csv("Status code NOK url" + url_tag, "No data", "No data", "No data", "No data",
+                               "No data", "No data" , "No data", "No data", "No data")
         return
 
+    print(type(url_tag))
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
 
     article_title = soup.find("h1", attrs={"class": "h2"})
@@ -48,9 +50,12 @@ def scrap(response, url_tag):
     content_clean = content.replace('class="h3"', "")
     date = datetime.strptime(article_date.string, "%B %d, %Y")
     formatted_date = date.strftime("%d %B, %Y")
-    language = 'en'
-
+    language = url_tag[1] + url_tag[2]
     article_image_url = article_image["src"]
+
+    if language != "fr" or language != "de" or language != "es" \
+            or language != "nl" or language != "ja" or not language:
+        language = "en"
 
     if article_image["alt"] == "":
         article_image["alt"] = title
