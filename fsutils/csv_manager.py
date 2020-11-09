@@ -6,13 +6,14 @@ def init_csv():
         # original delimiter was $
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(["title", "body", "tags", "date", "image", "url_tag"])
+        spamwriter.writerow(["title", "summary", "content", "tags", "date", "image_url", "image_alt",
+                             "image_title", "url_tag", "language"])
     return
 
 
-def create_csv(title, content, tags, date, image, url_tag):
+def create_csv(title, summary, content, tags, date, image_url, image_alt, image_title, url_tag, language):
     with open('./articles.csv', 'a') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([title, content, tags, date, image, url_tag])
+        spamwriter.writerow([title, summary, content, tags, date, image_url, image_alt, image_title, url_tag, language])
     return
