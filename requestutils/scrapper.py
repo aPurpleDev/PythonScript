@@ -24,7 +24,6 @@ def scrap(response, url_tag):
                                "No data", "No data" , "No data", "No data", "No data")
         return
 
-    print(type(url_tag))
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
 
     article_title = soup.find("h1", attrs={"class": "h2"})
