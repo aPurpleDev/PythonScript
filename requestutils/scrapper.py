@@ -4,7 +4,7 @@ from datetime import datetime
 from fsutils import csv_manager
 
 
-def find_handler(soup, name, attrs = None):
+def find_handler(soup, name, attrs=None):
     to_find = None
 
     if soup is not None:
@@ -21,7 +21,7 @@ def find_handler(soup, name, attrs = None):
 def scrap(response, url_tag):
     if response.status_code != 200:
         csv_manager.create_csv("Status code NOK url" + url_tag, "No data", "No data", "No data", "No data",
-                               "No data", "No data" , "No data", "No data", "No data")
+                               "No data", "No data", "No data", "No data", "No data", "Status code NOK url")
         return
 
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
@@ -30,7 +30,9 @@ def scrap(response, url_tag):
     article_content = soup.find("main", {"class": "container"})
     article_date = soup.find("span", {"class": "single__date"})
     article_image = soup.find("img")
-    div_tags = soup.find("ul", {"class": "single__tags"})
+
+    # not used, was present originally
+    # div_tags = soup.find("ul", {"class": "single__tags"})
 
     l_tags = find_handler(soup, "ul", attrs={"class": "single__tags"})
     tags = []
@@ -44,12 +46,15 @@ def scrap(response, url_tag):
         a_html['href'] = "/news/tags/" + text
     tag_list = tags
     tags = '|'.join(tags)
+
     title = article_title.string
     article_header = soup.find("p", attrs={"class": "p--excerpt"})
     content = str(article_header) + str(article_content)
     content_clean = content.replace('class="h3"', "")
+
     date = datetime.strptime(article_date.string, "%B %d, %Y")
     formatted_date = date.strftime("%d %B, %Y")
+
     language = url_tag[1] + url_tag[2]
     article_image_url = article_image["src"]
 
@@ -65,5 +70,5 @@ def scrap(response, url_tag):
 
     csv_manager.create_csv(title, article_header, content_clean, tags, formatted_date, article_image_url,
                            article_image["alt"], article_image["title"],
-                           url_tag, language, tag_list, url_tag)
+                           url_tag, language, tag_list)
     return

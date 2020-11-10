@@ -18,7 +18,7 @@ def init_csv():
 
 
 def create_csv(title, summary, content, tags, date, image_url, image_alt, image_title, url_tag, language,
-               categories, categories_url):
+               categories):
     with open('./articles.csv', 'a') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
