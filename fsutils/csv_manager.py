@@ -11,7 +11,7 @@ def init_csv():
                              "image_title", "url_tag", "language"])
 
     with open('./articles_complement.csv', 'w') as csvfile_complement:
-        spamwriter_complement = csv.writer(csvfile_complement, delimiter=';',
+        spamwriter_complement = csv.writer(csvfile_complement, delimiter='$',
                                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter_complement.writerow(["tag", "tag_url"])
     return
@@ -25,7 +25,7 @@ def create_csv(title, summary, content, tags, date, image_url, image_alt, image_
         spamwriter.writerow([title, summary, content, tags, date, image_url, image_alt, image_title, url_tag, language])
 
     with open('./articles_complement.csv', 'a') as csvfile_complement:
-        spamwriter_complement = csv.writer(csvfile_complement, delimiter=';',
+        spamwriter_complement = csv.writer(csvfile_complement, delimiter='$',
                                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for categorie in categories:
             spamwriter_complement.writerow([categorie, "/news/tags/" + re.sub('[^a-zA-Z.-]+', '-', categorie)])
