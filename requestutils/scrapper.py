@@ -42,6 +42,7 @@ def scrap(response, url_tag):
         if text is not None:
             text = re.sub(r"\s+", '-', text)
         a_html['href'] = "/news/tags/" + text
+    tag_list = tags
     tags = '|'.join(tags)
     title = article_title.string
     article_header = soup.find("p", attrs={"class": "p--excerpt"})
@@ -64,5 +65,5 @@ def scrap(response, url_tag):
 
     csv_manager.create_csv(title, article_header, content_clean, tags, formatted_date, article_image_url,
                            article_image["alt"], article_image["title"],
-                           url_tag, language, tags, url_tag)
+                           url_tag, language, tag_list, url_tag)
     return
