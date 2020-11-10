@@ -64,5 +64,5 @@ def scrap(response, url_tag):
 
     csv_manager.create_csv(title, article_header, content_clean, tags, formatted_date, article_image_url,
                            article_image["alt"], article_image["title"],
-                           url_tag, language)
+                           url_tag, language, tags, url_tag)
     return

@@ -8,12 +8,23 @@ def init_csv():
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow(["title", "summary", "content", "tags", "date", "image_url", "image_alt",
                              "image_title", "url_tag", "language"])
+
+    with open('./articles_complement.csv', 'w') as csvfile_complement:
+        spamwriter_complement = csv.writer(csvfile_complement, delimiter=';',
+                                           quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        spamwriter_complement.writerow(["catgories", "categories_url"])
     return
 
 
-def create_csv(title, summary, content, tags, date, image_url, image_alt, image_title, url_tag, language):
+def create_csv(title, summary, content, tags, date, image_url, image_alt, image_title, url_tag, language,
+               categories, categories_url):
     with open('./articles.csv', 'a') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow([title, summary, content, tags, date, image_url, image_alt, image_title, url_tag, language])
+
+    with open('./articles_complement.csv', 'a') as csvfile_complement:
+        spamwriter_complement = csv.writer(csvfile_complement, delimiter=';',
+                                           quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        spamwriter_complement.writerow([categories, categories_url])
     return
